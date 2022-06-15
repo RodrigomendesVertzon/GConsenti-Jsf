@@ -1,0 +1,72 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">DADOS</ui:define>
+		
+	<ui:define name="main-content">
+	    <div class="row">
+	      <h4 class="display-4">DADOS PESSOAIS</h4>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">TIPOS DE DADOS PESSOAIS</h5>
+		        <div class="card-img personal-data-type-icon"></div>
+		        <p class="card-text">
+		          Esta seção é dedicada ao cadastro do TIPO de um dado pessoal.
+		          Por "tipo", classifica-se a generalização do dado: RG, CPF, EMAIL, NOME,
+		          etc.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchPersonalDataTypesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  <hr/>
+		  <h4 class="display-4">FONTES DE DADOS</h4>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">TIPOS DE FONTES DE DADOS</h5>
+		        <div class="card-img database-type-icon"></div>
+		        <p class="card-text">
+		          Em resumo, o driver de conexão para uma fonte de dados do tipo Banco de Dados.
+		          Para que a máquina possa conectar-se a um Banco de Dados, primeiro é necessário
+		          especificar COMO a máquina deve comunicar-se com este Banco de Dados.
+			    </p>
+		        <p:link value="" outcome="#{routerBean.searchDatabaseTypesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">BANCO DE DADOS</h5>
+		        <div class="card-img datasource-icon"></div>
+		        <p class="card-text">
+		          A seção de Bancos de Dados registra os dados de acesso para
+		          um determinado banco de dados que será, mais tarde, varrido pelo
+		          algoritmo.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchDatasourcesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		   <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">ARQUIVO DE DADOS</h5>
+		        <div class="card-img datasource-icon"></div>
+		        <p class="card-text">
+		          A seção de Arquivo de Dados serve para registrar e procurar dados 
+		          específicos dentro de diretórios e arquivos.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchFilesourcesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+	    </div>
+	</ui:define>
+</ui:composition>

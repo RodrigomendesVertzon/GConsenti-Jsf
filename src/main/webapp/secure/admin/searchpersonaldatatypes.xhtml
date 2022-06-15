@@ -1,0 +1,167 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchPersonalDataTypeBean.personalDataTypeLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchPersonalDataTypeBean.personalDataTypeLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchPersonalDataTypeBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="personalDataTypesTable"
+										fileName="personal_data_types_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchPersonalDataTypeBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="personalDataTypesTable"
+										fileName="personal_data_types_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link
+									outcome="/secure/admin/registerpersonaldatatype.xhtml"
+									styleClass="dropdown-item">#{searchPersonalDataTypeBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchPersonalDataTypeBean.genericLabels[3]}"
+									actionListener="#{searchPersonalDataTypeBean.clear()}"
+									update="personalDataTypesTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="personalDataType"
+						value="#{searchPersonalDataTypeBean.personalDataTypes}"
+						id="personalDataTypesTable"
+						emptyMessage="#{searchPersonalDataTypeBean.personalDataTypeLabels[2]}"
+						rows="50" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="#{searchPersonalDataTypeBean.personalDataTypeLabels[3]}">
+							<h:outputText value="#{personalDataType.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchPersonalDataTypeBean.personalDataTypeLabels[4]}">
+							<h:outputText value="#{personalDataType.description}" />
+						</p:column>
+
+						<p:column headerText="#{searchPersonalDataTypeBean.personalDataTypeLabels[5]}">
+							<h:outputText value="#{personalDataType.method eq 'REGEX_IDENTIFICATION' ? 'Expressão Regular'
+												: personalDataType.method eq 'SCRIPT_IDENTIFICATION' ? 'Script'
+											    : 'Inteligência Artificial'}" />
+						</p:column>
+
+						<p:column headerText="#{searchPersonalDataTypeBean.personalDataTypeLabels[6]}">
+							<h:outputText value="#{personalDataType.category}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchPersonalDataTypeBean.personalDataTypeLabels[7]}">
+							<p:button outcome="/secure/admin/registerpersonaldatatype.xhtml"
+								icon="ui-icon-pencil" title="#{searchPersonalDataTypeBean.genericLabels[4]}">
+								<f:param name="personalDataType"
+									value="#{personalDataType.id}" />
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchPersonalDataTypeBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog">
+								<f:setPropertyActionListener
+									target="#{searchPersonalDataTypeBean.personalDataType}"
+									value="#{personalDataType}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchPersonalDataTypeBean.personalDataTypeLabels[8]}"
+				header="#{searchPersonalDataTypeBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchPersonalDataTypeBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchPersonalDataTypeBean.genericLabels[8]}"
+					update=":searchForm:personalDataTypesTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchPersonalDataTypeBean.delete}" />
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchPersonalDataTypeBean.personalDataTypeLabels[9]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputPersonalDataTypeName" value="#{searchPersonalDataTypeBean.personalDataTypeLabels[3]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputPersonalDataTypeName"
+								value="#{searchPersonalDataTypeBean.personalDataType.name}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputPersonalDataTypeDescription"
+								value="#{searchPersonalDataTypeBean.personalDataTypeLabels[4]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputPersonalDataTypeDescription"
+								value="#{searchPersonalDataTypeBean.personalDataType.description}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputIdentificationMethod"
+								value="#{searchPersonalDataTypeBean.personalDataTypeLabels[5]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputIdentificationMethod"
+								value="#{searchPersonalDataTypeBean.personalDataType.method}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputPersonalDataCategory"
+								value="#{searchPersonalDataTypeBean.personalDataTypeLabels[6]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputPersonalDataCategory"
+								value="#{searchPersonalDataTypeBean.personalDataType.category}"
+								onfocus="this.value = ''" />
+
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchPersonalDataTypeBean.search()}"
+								update="personalDataTypesTable" value="#{searchPersonalDataTypeBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

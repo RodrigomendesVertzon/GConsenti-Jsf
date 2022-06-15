@@ -1,0 +1,104 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">Pesquisa de Localizações de Dados Pessoais</ui:define>
+		
+	<ui:define name="main-content">
+	  <h:form id="searchForm">
+	  
+	    <div class="row">
+		  <nav class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+		    <a class="navbar-brand col-12">LOCALIZAÇÕES DE DADOS PESSOAIS</a>
+		    <button type="button" class="btn btn-search-icon image-light" data-bs-toggle="modal" data-bs-target="#searchModal"/>
+		    <div class="dropdown">
+		      <a class="btn btn-exports-icon image-light" href="#" role="button" id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false"/>
+		      <ul class="dropdown-menu" aria-labelledby="exportsMenu">
+			    <li>
+		          <h:commandLink styleClass="dropdown-item" value="Exportar XLS">
+		            <i class="btn-exports-icon"/>
+		            <p:dataExporter type="xls" postProcessor="#{postProcessBean.postProcessXLS}"
+				      target="personalDataLocationsTable" fileName="personal_data_locations_report_xls_#{postProcessBean.dateNow()}"/>
+			      </h:commandLink>
+			    </li>
+			    <li>
+		          <h:commandLink styleClass="dropdown-item" value="Exportar PDF">
+		            <p:dataExporter type="pdf" target="personalDataLocationsTable" 
+		              fileName="personal_data_locations_report_pdf_#{postProcessBean.dateNow()}" />
+			      </h:commandLink>
+			    </li>
+		      </ul>
+		    </div>
+		    <div class="dropdown">
+		      <a class="btn btn-settings-icon image-light" href="#" role="button" id="settingsMenu" data-bs-toggle="dropdown" aria-expanded="false"/>
+		      <ul class="dropdown-menu" aria-labelledby="settingsMenu">
+			    <li>
+			      <h:commandLink styleClass="dropdown-item" value="Atualizar"
+			        actionListener="#{searchPersonalDataLocationBean.clear()}" update="personalDataLocationsTable"/>
+		        </li>
+		      </ul>
+		    </div>
+		  </nav>
+        </div>
+      
+	    <div class="row">
+	      <p:link outcome="searchcorrelations.xhtml" value="Ver correlações" styleClass="btn btn-lg btn-primary"/>
+	      <div class="form-container col-12 d-flex flex-column">
+	        <p:dataTable var="personalDataLocation" value="#{searchPersonalDataLocationBean.personalDataLocations}" id="personalDataLocationsTable"
+		      emptyMessage="Nenhum tipo de dado pessoal encontrado." rows="50" paginator="true"
+		      paginatorAlwaysVisible="false" paginatorPosition="bottom" reflow="true">
+			  
+			  <p:column headerText="IP/Domain">
+			    <h:outputText value="#{personalDataLocation.ip}" />
+			  </p:column>
+			  
+			  <p:column headerText="Fonte de dados">
+			    <h:outputText value="#{personalDataLocation.datasourceName} " />
+			    <br/>
+			    <small>#{personalDataLocation.driver eq null ? '' : personalDataLocation.driver}</small>
+			  </p:column>	 
+				 
+			  <p:column headerText="Tabela/Linha">
+			    <h:outputText value="#{personalDataLocation.tableName}" />
+			  </p:column>
+				 
+			  <p:column headerText="Coluna">
+			    <h:outputText value="#{personalDataLocation.columnName}" />
+			  </p:column>
+				 
+			  <p:column headerText="Tipo de dado">
+			    <h:outputText value="#{personalDataLocation.personalDataTypeName}" />
+			  </p:column>
+			  
+		    </p:dataTable>
+	      </div>
+	    </div>
+
+	    <div class="modal fade" id="searchModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="searchModalLabel">Buscar</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      
+		      <div class="modal-body">
+		        <p:outputLabel for="inputPersonalDataLocationDatasource" value="Nome da fonte de dados"/>
+		        <p:inputText type="text" styleClass="form-control" id="inputPersonalDataLocationDatasource" 
+		          value="#{searchPersonalDataLocationBean.datasourceName}" onfocus="this.value = ''"/>		          
+		      </div>
+		      
+		      <div class="modal-footer">
+		        <h:commandButton styleClass="btn btn-success" actionListener="#{searchPersonalDataLocationBean.search()}" 
+		          update="personalDataLocationsTable" value="Buscar"/>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	    
+	  </h:form>
+	</ui:define>
+</ui:composition>

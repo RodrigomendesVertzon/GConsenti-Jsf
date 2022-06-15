@@ -1,0 +1,33 @@
+<ui:composition template="/WEB-INF/template/loginlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<ui:define name="title">DASHBOARD</ui:define>
+
+	<ui:define name="main-content">
+		<p:outputPanel rendered="#{not empty request.getAttribute('message')}"
+			class="ui-messages ui-widget">
+			<div class="ui-messages-error ui-corner-all">
+				<span class="ui-messages-error-icon"> </span>
+				<ul>
+					<li role="alert" aria-atomic="true"><span
+						class="ui-messages-error-summary">#{request.getAttribute('message')}</span>
+					</li>
+				</ul>
+			</div>
+		</p:outputPanel>
+
+		<div class="container-fluid">
+			<div class="row" style="text-align: center;">
+				<h1>403 - Acesso negado</h1>
+				<h3>Você não possui permissão para acessar esta página.</h3>
+				<h:link styleClass="btn btn-primary" outcome="/secure/dashboard" value="Retornar para Dashboard" />
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

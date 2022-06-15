@@ -1,0 +1,55 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui">
+
+  <ui:define name="title">#{registerUserBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  
+  	<f:metadata>
+		<f:viewParam name="user" value="#{registerUserBean.user}" converter="#{userConverter}"/>
+		<f:viewParam name="editing" value="#{registerUserBean.user.editing}"/>
+	</f:metadata>
+  
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerUserBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputUserName" value="#{registerUserBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputUserName" value="#{registerUserBean.user.name}"/>
+				
+		  <p:outputLabel for="inputUserEmail" value="#{registerUserBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputUserEmail" value="#{registerUserBean.user.email}"/>
+				
+		  <p:outputLabel for="inputUserPassword" value="#{registerUserBean.labels[4]}"/>
+		  <p:password type="secret" styleClass="form-control" id="inputUserPassword" value="#{registerUserBean.user.password}"/>
+				
+		  <p:outputLabel for="inputUserPhoneNumber" value="#{registerUserBean.labels[5]}"/>
+		  <p:inputMask mask="(99) 99999-9999" type="text" styleClass="form-control" id="inputUserPhoneNumber" maxlength="11" value="#{registerUserBean.user.phoneNumber}"/>
+		    	
+		  <p:outputLabel for="selectProfileAccess" value="#{registerUserBean.labels[6]}"/>
+		  <p:selectOneMenu id="selectProfileAccess" value="#{registerUserBean.user.profile}" styleClass="form-control col-12">
+			<f:selectItem value="#{userBean.user.profile}" var="profile"
+			  itemLabel="#{registerUserBean.labels[7]}" itemValue="ADMINISTRATOR"/>
+			<f:selectItem value="#{userBean.user.profile}" var="profile"
+			  itemLabel="#{registerUserBean.labels[8]}" itemValue="AUDITOR"/>  
+		  </p:selectOneMenu>
+	
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerUserBean.register}" value="#{registerUserBean.labels[9]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="/secure/admin/searchusers" value="#{registerUserBean.labels[10]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

@@ -1,0 +1,502 @@
+.legal-base-icon {
+	background-image: url("#{resource['images/svgs/legal-base.svg']}");
+}
+
+.finality-icon {
+	background-image: url("#{resource['images/svgs/finality.svg']}");
+}
+
+.legal-base-finality-icon {
+	background-image:
+		url("#{resource['images/svgs/legal-base-finality.svg']}");
+}
+
+.consent-icon {
+	background-image: url("#{resource['images/svgs/consent.svg']}");
+}
+
+.legal-base-consent-icon {
+	background-image:
+		url("#{resource['images/svgs/legal-base-consent.svg']}");
+}
+
+.regex-icon {
+	background-image: url("#{resource['images/svgs/regex.svg']}");
+}
+
+.script-icon {
+	background-image: url("#{resource['images/svgs/script.svg']}");
+}
+
+.ia-icon {
+	background-image: url("#{resource['images/svgs/ai.svg']}");
+}
+
+.personal-data-type-icon {
+	background-image:
+		url("#{resource['images/svgs/personal-data-type.svg']}");
+}
+
+.database-type-icon {
+	background-image: url("#{resource['images/svgs/database-type.svg']}");
+}
+
+.datasource-uri-icon {
+	background-image: url("#{resource['images/svgs/datasource-uri.svg']}");
+}
+
+.datasource-icon {
+	background-image: url("#{resource['images/svgs/datasource.svg']}");
+}
+
+.schedule-icon {
+	background-image: url("#{resource['images/svgs/schedule.svg']}");
+}
+
+.map-icon {
+	background-image: url("#{resource['images/svgs/map.svg']}");
+}
+
+.schedule-type-icon {
+	background-image: url("#{resource['images/svgs/schedule-type.svg']}");
+}
+
+.identification-column-icon {
+	background-image:
+		url("#{resource['images/svgs/identification-column.svg']}");
+}
+
+.identification-field-icon {
+	background-image:
+		url("#{resource['images/svgs/identification-field.svg']}");
+}
+
+.user-icon {
+	background-image: url("#{resource['images/svgs/user.svg']}");
+}
+
+.profile-access-icon {
+	background-image: url("#{resource['images/svgs/profile-access.svg']}");
+}
+
+.app-configuration-icon {
+	background-image:
+		url("#{resource['images/svgs/app-configuration.svg']}");
+}
+
+.btn-exports-icon {
+	background-image: url("#{resource['images/svgs/file-export.svg']}");
+}
+
+.btn-search-icon {
+	background-image: url("#{resource['images/svgs/search.svg']}");
+}
+
+.btn-reload-icon {
+	background-image: url("#{resource['images/svgs/reload.svg']}");
+}
+
+.btn-add-icon {
+	background-image: url("#{resource['images/svgs/add.svg']}");
+}
+
+.btn-settings-icon {
+	background-image:
+		url("#{resource['images/svgs/app-configuration.svg']}");
+}
+
+.btn-onwards-icon {
+	background-image: url("#{resource['images/svgs/onwards.svg']}");
+}
+
+.btn-backwards-icon {
+	background-image: url("#{resource['images/svgs/backwards.svg']}");
+}
+
+.ui-file-icon {
+	background-image: url("#{resource['images/svgs/file.svg']}");
+}
+
+.ui-datasource-icon {
+	background-image: url("#{resource['images/svgs/datasource.svg']}");
+}
+
+span.ui-button-icon-left.ui-icon.ui-c.ui-icon-pencil {
+	background-image: url("#{resource['images/svgs/edit.svg']}") !important;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+	filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(87deg)
+		brightness(100%) contrast(100%);
+}
+
+.ui-icon-trash {
+	background-image: url("#{resource['images/svgs/delete.svg']}")
+		!important;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+	filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(87deg)
+		brightness(100%) contrast(100%);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0 auto;
+	padding: 0;
+	height: 100%;
+}
+
+#loader {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background: #FFF9FB;
+	z-index: 999999;
+}
+
+#wrapper header {
+	margin: 0 auto;
+	padding: 0;
+}
+
+#wrapper header .navbar {
+	background-image: url("#{resource['images/nav-background.jpg']}");
+	background-repeat: no-repeat;
+	background-size: cover;
+	align-items: center;
+	color: #FFF9FB;
+}
+
+#wrapper header .navbar .navbar-brand {
+	position: absolute;
+	top: 10px;
+	left: 15px;
+	color: #FFF9FB;
+	font-size: 20px;
+	border-bottom: 2px solid #FFF9FB;
+}
+
+#wrapper header .navbar .navbar-toggler-icon {
+	position: relative;
+}
+
+#wrapper header .navbar .navbar-background-pane {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #5181B8 !important;
+	opacity: 0.8;
+}
+
+#wrapper header .navbar .navbar-nav {
+	margin: 0 auto;
+	padding-top: 30px;
+	height: calc(100vh - 56px);
+	text-align: center;
+	justify-content: start;
+	align-items: center;
+	z-index: 9999;
+}
+
+#wrapper header .navbar .navbar-nav .nav-item {
+	padding-left: 0;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+}
+
+#wrapper header .navbar .navbar-nav .nav-item .nav-link {
+	color: #FFF9FB;
+	font-size: 20px;
+}
+
+#wrapper header .navbar .navbar-nav .nav-item .nav-link:hover {
+	color: #252627;
+}
+
+#wrapper header .navbar .navbar-nav .nav-settings {
+	position: absolute;
+	bottom: 40px;
+}
+
+#wrapper header .navbar .navbar-collapse {
+	-webkit-transition: 0.5s ease-in-out;
+	transition: 0.5s ease-in-out;
+}
+
+#wrapper header .navbar .navbar-collapse.collapsing {
+	-webkit-transform: translateX(-100%);
+	transform: translateX(-100%);
+}
+
+#wrapper header .navbar .navbar-collapse.show {
+	-webkit-transform: translateX(0%);
+	transform: translateX(0%);
+}
+
+#wrapper header .navbar .navbar-brand:hover, #wrapper header .navbar .nav-link:hover
+	{
+	background: #c3c3c3;
+}
+
+#wrapper main {
+	position: absolute;
+	top: 0;
+	margin: 0 auto;
+	margin-bottom: 50px;
+	padding-top: 56px;
+	min-height: calc(100vh -56px);
+	height: 100vh;
+	max-height: auto;
+	align-items: center;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#wrapper main h4 {
+	width: 100%;
+	text-align: center;
+	background: #5181B8;
+	color: #FFF9FB;
+}
+
+#wrapper main .nav {
+	margin: 0 auto;
+	width: 100%;
+	max-height: 100px;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	color: #FFF9FB;
+	background: #5181B8 !important;
+}
+
+#wrapper main .nav .navbar-brand {
+	margin: 0 auto;
+	color: #FFF9FB;
+}
+
+#wrapper main .nav .btn {
+	margin-right: 5px;
+	margin-left: 5px;
+	margin-bottom: 10px;
+	width: 40px;
+	height: 40px;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+#wrapper main .nav .image-light {
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+	filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(87deg)
+		brightness(100%) contrast(100%);
+}
+
+#wrapper main .nav .image-light:hover {
+	filter: invert(0%) sepia(100%) saturate(100%) hue-rotate(87deg)
+		brightness(100%) contrast(100%);
+}
+
+#wrapper main .dashboard-statistics {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	position: relative;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 100px;
+	height: auto;
+}
+
+#wrapper main .dashboard-statistics .card-sm {
+	margin: 0.25rem 0.125rem;
+	min-height: 150px;
+	height: auto;
+	text-align: center;
+}
+
+#wrapper main .dashboard-statistics .card-sm h5 {
+	padding-top: 10px;
+}
+
+#wrapper main .dashboard-statistics .card-sm small {
+	padding-top: 5px;
+}
+
+#wrapper main .dashboard-statistics .card-sm img {
+	height: 30px;
+	background-repeat: no-repeat;
+}
+
+#wrapper main .card-container {
+	margin: 0.75rem auto;
+	min-height: 40vh;
+}
+
+#wrapper main .card-container .card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 40vh;
+	height: 100%;
+	max-height: auto;
+	text-align: center;
+	box-shadow: 8px 8px 4px rgba(81, 129, 184, 0.4);
+}
+
+#wrapper main .card-container .card .card-img {
+	position: relative;
+	width: 48px;
+	height: 48px;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#wrapper main .card-container .card .card-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+#wrapper main .card-container .btn-full {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#wrapper main .card-container .btn-full:hover {
+	background: rgba(195, 195, 195, 0.3);
+}
+
+#wrapper main form {
+	margin: auto;
+	padding: 0 auto;
+	height: 100%;
+	justify-content: center;
+	text-align: center;
+}
+
+#wrapper main form .form-container {
+	flex: 1;
+	margin: 0 auto;
+	padding-top: 15px;
+	text-align: left;
+}
+
+#wrapper main form .form-container [class*=form-control] {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#wrapper main form .form-container .ui-column-title {
+	font-weight: bold;
+}
+
+#wrapper main form .form-container .ui-button-text.ui-c {
+	padding-left: 16px;
+}
+
+#wrapper main form .form-container div.ui-datatable table {
+	overflow-wrap: break-word;
+	text-align: center;
+	border-spacing: 0 .5rem !important;
+	border-collapse: separate;
+}
+
+#wrapper main form .form-container div.ui-datatable table .ui-datalist-content
+	{
+	margin: 0 auto;
+	padding: 0;
+	background-color: inherit;
+	border: none;
+}
+
+#wrapper main form .form-container .button-panel {
+	display: flex;
+	justify-content: flex-end;
+	margin: 0;
+	margin-bottom: 20px;
+	padding: 0;
+	padding-top: 20px;
+}
+
+#wrapper main form .form-container .button-panel .btn {
+	text-align: center;
+	width: 120px;
+	height: 40px;
+	border-radius: 20px;
+	margin-right: 0.5rem;
+}
+
+@media screen and (max-width: 767px) {
+	.ui-column-title {
+		width: 100%;
+	}
+}
+
+@media screen and (min-width: 992px) {
+	#wrapper header {
+		height: 100vh;
+	}
+	#wrapper header .navbar {
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		-webkit-transform: translateX(-90%);
+		transform: translateX(-90%);
+		-webkit-transition: 0.5s;
+		transition: 0.5s;
+	}
+	#wrapper header .navbar:hover {
+		-webkit-transform: translateX(0);
+		transform: translateX(0);
+	}
+	#wrapper header .navbar .navbar-nav {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	#wrapper header .navbar .navbar-nav .nav-item, #wrapper header .navbar .navbar-nav .nav-link
+		{
+		display: block;
+		width: 100%;
+	}
+	#wrapper main {
+		padding-top: 0;
+		padding-bottom: 10px;
+		padding-left: 46px;
+	}
+	#wrapper main .card-container .card {
+		min-height: 50vh;
+	}
+	#wrapper main .chart-container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		flex: 1 1;
+	}
+	#wrapper main .chart-container .card-container {
+		padding: 0.5rem 0.5rem;
+	}
+	#wrapper main .chart-container .card-container .chart {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.fade-in {
+	padding: 0;
+	animation: fadeIn 400ms ease-in-out;
+}
+
+
+@keyframes fadeIn {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}

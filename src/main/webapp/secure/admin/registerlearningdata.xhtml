@@ -1,0 +1,110 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:pe="http://primefaces.org/ui/extensions">
+
+  <ui:define name="title">#{registerLearningDataBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  	
+  	<f:metadata>
+		<f:viewParam name="learningData" value="#{registerLearningDataBean.learningData}" converter="#{learningDataConverter}"/>
+		<f:viewParam name="editing" value="#{registerLearningDataBean.learningData.editing}" />
+	</f:metadata>
+  
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerLearningDataBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+		  
+		  <p:outputLabel for="inputLearningDataName" value="#{registerLearningDataBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningDataName" value="#{registerLearningDataBean.learningData.name}"/>
+		  	
+		  <p:outputLabel for="inputLearningDataDescription" value="#{registerIdentificationFieldBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningDataDescription" value="#{registerLearningDataBean.learningData.description}"/>
+		  	
+		  <p:outputLabel for="selectDatasource" value="#{registerLearningDataBean.labels[4]}"/>
+		  <p:selectOneMenu id="selectDatasource" value="#{registerLearningDataBean.learningData.datasource}" 
+		    converter="#{datasourceConverter}" styleClass="form-control col-12">
+		  	<f:selectItems value="#{registerLearningDataBean.datasources}" var="datasource"
+		  	  itemLabel="#{datasource.name}" itemValue="#{datasource}"/>
+		  </p:selectOneMenu>
+		  
+		  <p:outputLabel for="inputLearningDataTableName" value="#{registerLearningDataBean.labels[5]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningDataTableName" value="#{registerLearningDataBean.learningData.tableName}"/>
+		  
+		  <p:outputLabel for="inputLearningDataDecisionColumn" value="#{registerLearningDataBean.labels[6]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningDataDecisionColumn" value="#{registerLearningDataBean.learningData.decisionColumn}"/>
+		  	
+		  <p:outputLabel for="inputLearningDataClassColumn" value="#{registerLearningDataBean.labels[7]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningDataClassColumn" value="#{registerLearningDataBean.learningData.classColumn}"/>
+		  
+		  <p:outputLabel for="selectPersonalDataType" value="#{registerLearningDataBean.labels[8]}"/>
+		  <p:selectOneMenu id="selectPersonalDataType" value="#{registerLearningDataBean.learningData.personalDataType}" 
+		    converter="#{personalDataTypeConverter}" styleClass="form-control col-12">
+			<f:selectItems value="#{registerLearningDataBean.personalDataTypes}" var="personalDataType"
+			  itemLabel="#{personalDataType.name}" itemValue="#{personalDataType}"/>
+		  </p:selectOneMenu>
+
+		  <p:fieldset>
+		    <h4>#{registerLearningDataBean.labels[9]}</h4>
+            <p class="px-4 text-center">
+			  #{registerLearningDataBean.labels[10]}
+            </p>
+		  	<p:toggleSwitch id="switchUseIdf" value="#{registerLearningDataBean.learningData.useIdf}" style="height: 25px;"/>
+          </p:fieldset>
+		  
+		  <p:fieldset>
+		    <h4>#{registerLearningDataBean.labels[11]}</h4>
+            <p class="px-4 text-center">
+				#{registerLearningDataBean.labels[12]}
+            </p>
+            <p:toggleSwitch id="switchUseStemmer" value="#{registerLearningDataBean.learningData.useStemmer}" style="height: 25px;"/>
+          </p:fieldset>
+          
+          <p:fieldset>
+		    <h4>#{registerLearningDataBean.labels[13]}</h4>
+            <p class="px-4 text-center">
+				#{registerLearningDataBean.labels[14]}
+            </p>
+		  <p:inputText type="text" styleClass="form-control" id="inputMinimumTermFrequency" value="#{registerLearningDataBean.learningData.minimumTermFrequency}"/>
+          </p:fieldset>
+          
+          <p:fieldset>
+		    <h4>#{registerLearningDataBean.labels[15]}</h4>
+            <p class="px-4 text-center">
+				#{registerLearningDataBean.labels[16]}
+            </p>
+            <p:outputLabel for="inputMinimumTokenizerSteps" value="#{registerLearningDataBean.labels[17]}"/>  
+		    <p:inputText type="text" styleClass="form-control" id="inputMinimumTokenizerSteps" value="#{registerLearningDataBean.learningData.minimumTokenizerSteps}"/>
+            <p:outputLabel for="inputMaximumTokenizerSteps" value="#{registerLearningDataBean.labels[18]}"/>  
+		    <p:inputText type="text" styleClass="form-control" id="inputMaximumTokenizerSteps" value="#{registerLearningDataBean.learningData.maximumTokenizerSteps}"/>
+          </p:fieldset>
+          
+          <p:fieldset>
+		    <h4>#{registerLearningDataBean.labels[19]}</h4>
+            <p class="px-4 text-center">
+				#{registerLearningDataBean.labels[20]}
+            </p>
+		  <p:inputText type="text" styleClass="form-control" id="inputWordsToKeep" value="#{registerLearningDataBean.learningData.wordsToKeep}"/>
+          </p:fieldset>
+		  
+		  
+		  
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerLearningDataBean.register}" value="#{registerLearningDataBean.labels[21]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="#{routerBean.searchLearningDatasPage}" value="#{registerLearningDataBean.labels[22]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

@@ -1,0 +1,150 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLegalBaseFinalityBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="legalBaseFinalitiesTable"
+										fileName="legal_base_finalities_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLegalBaseFinalityBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="legalBaseFinalitiesTable"
+										fileName="legal_base_finalities_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link
+									outcome="/secure/admin/registerlegalbasefinality.xhtml"
+									styleClass="dropdown-item">#{searchLegalBaseFinalityBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLegalBaseFinalityBean.genericLabels[3]}" actionListener="#{searchUserBean.clear()}"
+									update="legalBaseFinalitiesTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="legalBaseFinality"
+						value="#{searchLegalBaseFinalityBean.legalBaseFinalities}"
+						id="legalBaseFinalitiesTable"
+						emptyMessage="#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[2]}"
+						rows="50" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[3]}">
+							<h:outputText value="#{legalBaseFinality.legalBase.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[4]}">
+							<h:outputText value="#{legalBaseFinality.finality.name}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[5]}">
+							<p:button outcome="/secure/admin/registerlegalbasefinality.xhtml"
+								icon="ui-icon-pencil" title="#{searchLegalBaseFinalityBean.genericLabels[4]}">
+								<f:param name="legalBaseFinality"
+									value="#{legalBaseFinality.id}" />
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchLegalBaseFinalityBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog">
+								<f:setPropertyActionListener
+									target="#{searchLegalBaseFinalityBean.legalBaseFinality}"
+									value="#{legalBaseFinality}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[6]}"
+				header="#{searchLegalBaseFinalityBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchLegalBaseFinalityBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchLegalBaseFinalityBean.genericLabels[8]}"
+					update=":searchForm:legalBaseFinalitiesTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchLegalBaseFinalityBean.delete}" />
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[7]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="selectLegalBase" value="#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[3]}" />
+							<p:selectOneMenu id="selectLegalBase"
+								value="#{searchLegalBaseFinalityBean.legalBaseFinality.legalBase}"
+								converter="#{legalBaseConverter}"
+								styleClass="form-control col-12">
+								<f:selectItems value="#{searchLegalBaseFinalityBean.legalBases}"
+									var="legalBase" itemLabel="#{legalBase.name}"
+									itemValue="#{legalBase}" />
+								<f:attribute name="collectionType" value="java.util.ArrayList" />;
+							</p:selectOneMenu>
+
+							<p:outputLabel for="selectFinality" value="#{searchLegalBaseFinalityBean.legalBaseFinalityLabels[4]}" />
+							<p:selectOneMenu id="selectFinality"
+								value="#{searchLegalBaseFinalityBean.legalBaseFinality.finality}"
+								converter="#{finalityConverter}"
+								styleClass="form-control col-12">
+								<f:selectItems value="#{searchLegalBaseFinalityBean.finalities}"
+									var="finality" itemLabel="#{finality.name}"
+									itemValue="#{finality}" />
+								<f:attribute name="collectionType" value="java.util.ArrayList" />;
+							</p:selectOneMenu>
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchUserBean.search()}"
+								update="legalBaseFinalitiesTable" value="#{searchLegalBaseFinalityBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

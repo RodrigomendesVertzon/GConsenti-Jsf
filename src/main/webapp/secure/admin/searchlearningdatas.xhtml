@@ -1,0 +1,189 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchLearningDataBean.learningDataLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">DATA</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningDataBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="learningDatasTable"
+										fileName="learning_datas_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningDataBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="learningDatasTable"
+										fileName="learning_datas_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link
+									outcome="#{routerBean.registerLearningDataPage}"
+									styleClass="dropdown-item">#{searchLearningDataBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningDataBean.genericLabels[3]}"
+									actionListener="#{searchLearningDataBean.clear()}"
+									update="learningDatasTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="learningData"
+						value="#{searchLearningDataBean.learningDatas}"
+						id="learningDatasTable"
+						emptyMessage="#{searchLearningDataBean.learningDataLabels[2]}" rows="50"
+						paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="#{searchLearningDataBean.learningDataLabels[3]}">
+							<h:outputText value="#{learningData.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningDataBean.learningDataLabels[4]}">
+							<h:outputText value="#{learningData.description}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningDataBean.learningDataLabels[5]}">
+							<h:outputText value="#{learningData.tableName}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningDataBean.learningDataLabels[6]}">
+							<h:outputText value="#{learningData.decisionColumn}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningDataBean.learningDataLabels[7]}">
+							<h:outputText value="#{learningData.classColumn}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningDataBean.learningDataLabels[8]}">
+							<h:outputText value="#{learningData.datasource.name}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchLearningDataBean.learningDataLabels[9]}">
+							<p:button outcome="/secure/admin/registerlearningdata.xhtml"
+								icon="ui-icon-pencil" title="#{searchLearningDataBean.genericLabels[4]}">
+								<f:param name="learningData" value="#{learningData.id}" />
+								<f:param name="editing" value="#{learningData.editing=true}"/>
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchLearningDataBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog">
+								<f:setPropertyActionListener
+									target="#{searchLearningDataBean.learningData}"
+									value="#{learningData}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchLearningDataBean.learningDataLabels[10]}"
+				header="#{searchLearningDataBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchLearningDataBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchLearningDataBean.genericLabels[8]}"
+					update=":searchForm:learningDatasTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchLearningDataBean.delete}" />
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchLearningDataBean.learningDataLabels[11]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputLearningDataName" value="#{searchLearningDataBean.learningDataLabels[3]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningDataName"
+								value="#{searchLearningDataBean.learningData.name}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningDataEmail" value="#{searchLearningDataBean.learningDataLabels[4]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningDataEmail"
+								value="#{searchLearningDataBean.learningData.description}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningDataTableName"
+								value="#{searchLearningDataBean.learningDataLabels[5]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningDataTableName"
+								value="#{searchLearningDataBean.learningData.tableName}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningDataDecisionColumn"
+								value="#{searchLearningDataBean.learningDataLabels[6]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningDataDecisionColumn"
+								value="#{searchLearningDataBean.learningData.decisionColumn}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningDataClassColumn"
+								value="#{searchLearningDataBean.learningDataLabels[7]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningDataClassColumn"
+								value="#{searchLearningDataBean.learningData.classColumn}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="selectDatasource"
+								value="#{searchLearningDataBean.learningDataLabels[8]}" />
+							<p:selectOneMenu id="selectDatasource"
+								value="#{searchLearningDataBean.learningData.datasource}"
+								converter="#{datasourceConverter}" styleClass="form-control">
+								<f:selectItems value="#{searchLearningDataBean.datasources}"
+									var="datasource" itemLabel="#{datasource.name}"
+									itemValue="#{datasource}" />
+							<f:attribute name="collectionType" value="java.util.ArrayList" />	
+							</p:selectOneMenu>
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchLearningDataBean.search()}"
+								update="learningDatasTable" value="#{searchLearningDataBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

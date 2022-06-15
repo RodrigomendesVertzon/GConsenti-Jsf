@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<h:outputStylesheet name="css/bootstrap.css" />
+		<h:outputStylesheet name="css/loginstyle.css" />
+	
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Default Layout" />
+		<meta name="author" content="Vertzon Tecnologia e Servicos LTDA." />
+	
+		<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+		<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+		<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+		<!--[if gt IE 8]> <html class="no-js" lang="en"> <![endif]-->
+	
+		<title>
+			<ui:insert name="title">
+	        	LOGIN
+	      	</ui:insert>
+	   	</title>
+	   	
+	</h:head>
+	
+	<h:body>
+		<main class="container-fluid">
+			<ui:insert name="main-content" /> 
+		</main>
+	
+		<h:outputScript name="js/bootstrap.bundle.js" />
+	</h:body>
+</html>

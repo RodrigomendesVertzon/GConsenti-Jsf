@@ -1,0 +1,133 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="title">#{searchErrorMessagesBean.errorMessageLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm" class="search-form">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchErrorMessagesBean.errorMessageLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchErrorMessagesBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="errorMessagesTable"
+										fileName="error_messages_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchErrorMessagesBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="errorMessagesTable"
+										fileName="error_messages_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchErrorMessagesBean.genericLabels[3]}"
+									actionListener="#{searchErrorMessagesBean.clear()}"
+									update="errorMessagesTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="errorMessage"
+						value="#{searchErrorMessagesBean.errorMessages}"
+						id="errorMessagesTable"
+						emptyMessage="#{searchErrorMessagesBean.errorMessageLabels[2]}"
+						rows="25" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+						
+						<p:column headerText="#{searchErrorMessagesBean.errorMessageLabels[3]}">
+							<h:outputText value="#{errorMessage.errorCode}" />
+						</p:column>
+
+						<p:column headerText="#{searchErrorMessagesBean.errorMessageLabels[4]}">
+							<h:outputText value="#{errorMessage.label}" />
+						</p:column>
+
+						<p:column headerText="#{searchErrorMessagesBean.errorMessageLabels[5]}">
+							<h:outputText value="#{errorMessage.descError}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="Opções">
+							<p:button outcome="/secure/admin/registererrormessage.xhtml"
+								icon="ui-icon-pencil" title="#{searchErrorMessagesBean.genericLabels[6]}">
+								<f:param name="errorMessage" value="#{errorMessage.id}"/>
+							</p:button>
+
+							
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchErrorMessagesBean.errorMessageLabels[7]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputErrorMessageErrorCode" 
+								value="#{searchErrorMessagesBean.errorMessageLabels[3]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputErrorMessageErrorCode"
+								value="#{searchErrorMessagesBean.errorMessage.errorCode}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputErrorMessageLabel"
+								value="#{searchErrorMessagesBean.errorMessageLabels[4]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputErrorMessageLabel"
+								value="#{searchErrorMessagesBean.errorMessage.label}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputErrorMessageDescError"
+								value="#{searchErrorMessagesBean.errorMessageLabels[5]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputErrorMessageDescError"
+								value="#{searchErrorMessagesBean.errorMessage.descError}"
+								onfocus="this.value = ''" />
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchErrorMessagesBean.search()}"
+								update="errorMessagesTable" value="#{searchErrorMessagesBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

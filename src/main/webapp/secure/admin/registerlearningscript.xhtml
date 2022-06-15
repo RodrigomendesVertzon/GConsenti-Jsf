@@ -1,0 +1,51 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:pe="http://primefaces.org/ui/extensions">
+
+  <ui:define name="title">#{registerLearningScriptBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  	
+  	<f:metadata>
+		<f:viewParam name="learningScript" value="#{registerLearningScriptBean.learningScript}" converter="#{learningScriptConverter}"/>
+	</f:metadata>
+  
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerLearningScriptBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputLearningScriptName" value="#{registerLearningScriptBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningScriptName" value="#{registerLearningScriptBean.learningScript.name}"/>
+				
+		  <p:outputLabel for="inputLearningScriptDescription" value="#{registerLearningScriptBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningScriptDescription" value="#{registerLearningScriptBean.learningScript.description}"/>
+				
+		  <p:outputLabel for="inputLearningScriptCode" value="#{registerLearningScriptBean.labels[4]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningScriptCode" value="#{registerLearningScriptBean.learningScript.code}"/>
+		  						    	
+		  <p:outputLabel for="selectPersonalDataType" value="#{registerLearningScriptBean.labels[5]}"/>
+		  <p:selectOneMenu id="selectPersonalDataType" value="#{registerLearningScriptBean.learningScript.personalDataType}" 
+		    converter="#{personalDataTypeConverter}" styleClass="form-control col-12">
+		  	<f:selectItems value="#{registerLearningScriptBean.personalDataTypes}" var="personalDataType"
+		  	  itemLabel="#{personalDataType.name}" itemValue="#{personalDataType}"/>
+		  </p:selectOneMenu>
+	
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerLearningScriptBean.register}" value="#{registerLearningScriptBean.labels[6]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="/secure/admin/searchlearningscripts" value="#{registerLearningScriptBean.labels[7]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

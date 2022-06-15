@@ -1,0 +1,183 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchScanScheduleBean.scanScheduleLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchScanScheduleBean.scanScheduleLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchScanScheduleBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="scanSchedulesTable"
+										fileName="scan_schedules_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchScanScheduleBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="scanSchedulesTable"
+										fileName="scan_schedules_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li>
+								<button type="button" class="dropdown-item"
+									data-bs-toggle="modal" data-bs-target="#registerModal">
+									#{searchScanScheduleBean.genericLabels[2]}</button>
+							</li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchScanScheduleBean.genericLabels[3]}"
+									actionListener="#{searchScanScheduleBean.clear()}"
+									update="scanSchedulesTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="scanSchedule"
+						value="#{searchScanScheduleBean.scanSchedules}"
+						id="scanSchedulesTable"
+						emptyMessage="#{searchScanScheduleBean.scanScheduleLabels[2]}" rows="50"
+						paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+						<p:column headerText="#{searchScanScheduleBean.scanScheduleLabels[3]}">
+							<h:outputText value="#{scanSchedule.stringDate}" />
+						</p:column>
+
+						<p:column headerText="#{searchScanScheduleBean.scanScheduleLabels[4]}">
+							<small>#{scanSchedule.datasource.databaseType.driver}</small>
+							<br/>
+							<span
+								class="#{scanSchedule.filesource eq null ? 'ui-icon ui-datasource-icon' : 'ui-icon ui-file-icon'}" />
+							<h:outputText
+								value="#{scanSchedule.filesource eq null ? scanSchedule.datasource.name : scanSchedule.filesource.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchScanScheduleBean.scanScheduleLabels[5]}">
+							<h:outputText value="#{scanSchedule.type}" />
+						</p:column>
+
+						<p:column headerText="#{searchScanScheduleBean.scanScheduleLabels[6]}"
+							style="
+							#{scanSchedule.status eq 'AGUARDANDO' ? 'background: #f3f595'
+							: scanSchedule.status eq 'EXECUTANDO' ? 'background: #42b5db' 
+							: scanSchedule.status eq 'SUCESSO' ? 'background: #44e371'
+							: scanSchedule.status eq 'FALHA' ? 'background: #de232d; color: white'
+							: ''}">
+							<h:outputText value="#{scanSchedule.status}" />
+						</p:column>
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchScanScheduleBean.scanScheduleLabels[7]}">
+							<p:button
+								outcome="#{scanSchedule.filesource eq null ? '/secure/admin/registerscanscheduledata.xhtml' : '/secure/admin/registerscanschedulefile.xhtml'}"
+								icon="ui-icon-pencil" title="#{searchScanScheduleBean.genericLabels[4]}">
+								<f:param name="scanSchedule" value="#{scanSchedule.id}" />
+								<f:param name="editing" value="#{scanSchedule.editing=true}" />
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchScanScheduleBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog">
+								<f:setPropertyActionListener
+									target="#{searchScanScheduleBean.scanSchedule}"
+									value="#{scanSchedule}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchScanScheduleBean.scanScheduleLabels[8]}"
+				header="#{searchScanScheduleBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchScanScheduleBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchScanScheduleBean.genericLabels[8]}" update=":searchForm:scanSchedulesTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchScanScheduleBean.delete}" />
+			</p:confirmDialog>
+
+			<div class="modal fade show" id="searchModal"
+				data-bs-keyboard="false" tabindex="-1"
+				aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchScanScheduleBean.scanScheduleLabels[9]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputScanScheduledDate" value="#{searchScanScheduleBean.scanScheduleLabels[3	]}" />
+							<p:datePicker type="text" styleClass="form-control col-12"
+								id="inputScanScheduledDate"
+								value="#{searchScanScheduleBean.scanSchedule.datetime}" />
+
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchScanScheduleBean.search()}"
+								update="scanSchedulesTable" value="#{searchScanScheduleBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="registerModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="registerModalLabel"
+				aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchScanScheduleBean.scanScheduleLabels[10]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p>
+								#{searchScanScheduleBean.scanScheduleLabels[11]}
+							</p>
+						</div>
+
+						<div class="modal-footer">
+							<h:link styleClass="btn btn-primary"
+								outcome="registerscanscheduledata.xhtml" value="Fonte de Dados" />
+							<h:link styleClass="btn btn-secondary"
+								outcome="registerscanschedulefile.xhtml" value="Arquivo" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

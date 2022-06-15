@@ -1,0 +1,130 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchIdentificationColumnBean.identificationColumnLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchIdentificationColumnBean.identificationColumnLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchIdentificationColumnBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="identificationColumnsTable"
+										fileName="identification_columns_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchIdentificationColumnBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="identificationColumnsTable"
+										fileName="identification_columns_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link
+									outcome="/secure/admin/registeridentificationcolumn.xhtml"
+									styleClass="dropdown-item">#{searchIdentificationColumnBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchIdentificationColumnBean.genericLabels[3]}"
+									actionListener="#{searchIdentificationColumnBean.clear()}"
+									update="identificationColumnsTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="identificationColumn"
+						value="#{searchIdentificationColumnBean.identificationColumns}"
+						id="identificationColumnsTable"
+						emptyMessage="#{searchIdentificationColumnBean.identificationColumnLabels[2]}"
+						rows="50" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="#{searchIdentificationColumnBean.identificationColumnLabels[3]}">
+							<h:outputText value="#{identificationColumn.columnName}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchIdentificationColumnBean.identificationColumnLabels[4]}">
+							<p:button outcome="#{routerBean.registerIdentificationColumnPage}"
+								icon="ui-icon-pencil" title="#{searchIdentificationColumnBean.genericLabels[4]}" styleClass="edit-button">
+								<f:param name="identificationColumn" value="#{identificationColumn.id}" />
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchIdentificationColumnBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog"
+								styleClass="delete-button">
+								<f:setPropertyActionListener
+									target="#{searchIdentificationColumnBean.identificationColumn}" value="#{identificationColumn}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchIdentificationColumnBean.identificationColumnLabels[5]}"
+				header="#{searchIdentificationColumnBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchIdentificationColumnBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchIdentificationColumnBean.genericLabels[8]}"
+					update=":searchForm:identificationColumnsTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchIdentificationColumnBean.delete}" styleClass="delete-button"/>
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchIdentificationColumnBean.identificationColumnLabels[6]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputIdentificationColumnName" value="#{searchIdentificationColumnBean.identificationColumnLabels[3]}"/>
+							<p:inputText type="text" styleClass="form-control"
+								id="inputIdentificationColumnName"
+								value="#{searchIdentificationColumnBean.identificationColumn.columnName}"
+								onfocus="this.value = ''" />
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchIdentificationColumnBean.search()}"
+								update="identificationColumnsTable" value="#{searchIdentificationColumnBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

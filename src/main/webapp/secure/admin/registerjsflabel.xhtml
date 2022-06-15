@@ -1,0 +1,44 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:o="http://omnifaces.org/ui">
+
+  <ui:define name="title">#{registerJsfLabelBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  
+  	<f:metadata>
+		<f:viewParam name="jsfLabel" value="#{registerJsfLabelBean.jsfLabel}" converter="#{jsfLabelConverter}"/>
+	</f:metadata>
+	
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerJsfLabelBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputJsfLabelCode" value="#{registerJsfLabelBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" disabled="true" id="inputJsfLabelCode" value="#{registerJsfLabelBean.jsfLabel.jsfCode}"/>
+				
+		  <p:outputLabel for="inputJsfLabelEnum" value="#{registerJsfLabelBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" disabled="true" id="inputJsfLabelEnum" value="#{registerJsfLabelBean.jsfLabel.jsfBean}"/>
+		  
+		  <p:outputLabel for="inputJsfLabelDescription" value="#{registerJsfLabelBean.labels[4]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputJsfLabelDescription" value="#{registerJsfLabelBean.jsfLabel.label}"/>
+		  
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerJsfLabelBean.register()}" value="#{registerJsfLabelBean.labels[5]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="#{routerBean.searchJsfLabelsPage}" value="#{registerJsfLabelBean.labels[6]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

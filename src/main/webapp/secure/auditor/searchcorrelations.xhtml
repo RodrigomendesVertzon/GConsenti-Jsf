@@ -1,0 +1,115 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">Pesquisa de Correlações de Dados Pessoais</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">CORRELAÇÕES DE DADOS PESSOAIS</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="Exportar XLS">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="personalDataCorrelationsTable"
+										fileName="correlation_locations_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="Exportar PDF">
+									<p:dataExporter type="pdf"
+										target="personalDataCorrelationsTable"
+										fileName="correlation_locations_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="personalDataCorrelation"
+						value="#{searchPersonalDataCorrelationBean.correlations}"
+						id="personalDataCorrelationsTable"
+						emptyMessage="Utilize o botão de busca para pesquisar por registros."
+						rows="50" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="BANCO">
+							<h:outputText value="#{personalDataCorrelation.banco}" />
+						</p:column>
+
+						<p:column headerText="TABELA">
+							<h:outputText value="#{personalDataCorrelation.tabela}" />
+						</p:column>
+						
+						<p:column headerText="COLUNA">
+							<h:outputText value="#{personalDataCorrelation.coluna}" />
+						</p:column>
+
+						<p:column headerText="NOME">
+							<h:outputText value="#{personalDataCorrelation.nome}" />
+						</p:column>
+
+					</p:dataTable>
+				</div>
+			</div>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">Buscar</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputPersonalDataCorrelationDataNome"
+								value="NOME" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputPersonalDataCorrelationDataNome"
+								value="#{searchPersonalDataCorrelationBean.nome}"
+								onfocus="this.value = ''" autocomplete="off"/>
+
+							<p:outputLabel for="inputPersonalDataCorrelationDataCpf"
+								value="CPF" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputPersonalDataCorrelationDataCpf"
+								value="#{searchPersonalDataCorrelationBean.cpf}"
+								onfocus="this.value = ''" autocomplete="off"/>
+
+							<p:outputLabel for="inputPersonalDataCorrelationDataRg"
+								value="RG" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputPersonalDataCorrelationDataRg"
+								value="#{searchPersonalDataCorrelationBean.rg}"
+								onfocus="this.value = ''" autocomplete="off"/>
+						</div>
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchPersonalDataCorrelationBean.search()}"
+								update="personalDataCorrelationsTable" value="Buscar" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

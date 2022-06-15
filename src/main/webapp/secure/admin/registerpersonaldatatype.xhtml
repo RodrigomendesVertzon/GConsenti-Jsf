@@ -1,0 +1,56 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui">
+
+  <ui:define name="title">#{registerPersonalDataTypeBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  	
+  	<f:metadata>
+		<f:viewParam name="personalDataType" value="#{registerPersonalDataTypeBean.personalDataType}" converter="#{personalDataTypeConverter}"/>
+	</f:metadata>
+  
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerPersonalDataTypeBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputPersonalDataTypeName" value="#{registerPersonalDataTypeBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputPersonalDataTypeName" value="#{registerPersonalDataTypeBean.personalDataType.name}"/>
+				
+		  <p:outputLabel for="inputPersonalDataTypeDescription" value="#{registerPersonalDataTypeBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputPersonalDataTypeDescription" value="#{registerPersonalDataTypeBean.personalDataType.description}"/>
+		  
+		  <p:outputLabel for="selectIdentificationMethod" value="#{registerPersonalDataTypeBean.labels[4]}"/>
+		  <p:selectOneMenu id="selectIdentificationMethod" value="#{registerPersonalDataTypeBean.methodValue}" 
+		    styleClass="form-control col-12">
+			<f:selectItem itemLabel="#{registerPersonalDataTypeBean.labels[5]}" itemValue="REGEX_IDENTIFICATION"/>
+			<f:selectItem itemLabel="#{registerPersonalDataTypeBean.labels[6]}" itemValue="SCRIPT_IDENTIFICATION"/>
+			<f:selectItem itemLabel="#{registerPersonalDataTypeBean.labels[7]}" itemValue="AI_IDENTIFICATION"/>
+		  </p:selectOneMenu>
+		  
+		  <p:outputLabel for="selectPersonalDataCategory" value="#{registerPersonalDataTypeBean.labels[8]}"/>
+		  <p:selectOneMenu id="selectPersonalDataCategory" value="#{registerPersonalDataTypeBean.categoryValue}" 
+		    styleClass="form-control col-12">
+			<f:selectItem itemLabel="#{registerPersonalDataTypeBean.labels[9]}" itemValue="INDIRETO"/>
+			<f:selectItem itemLabel="#{registerPersonalDataTypeBean.labels[10]}" itemValue="DIRETO"/>
+			<f:selectItem itemLabel="#{registerPersonalDataTypeBean.labels[11]}" itemValue="SENSIVEL"/>
+		  </p:selectOneMenu>
+		  
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerPersonalDataTypeBean.register}" value="#{registerPersonalDataTypeBean.labels[12]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="/secure/admin/searchpersonaldatatypes" value="#{registerPersonalDataTypeBean.labels[13]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

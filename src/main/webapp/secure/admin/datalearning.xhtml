@@ -1,0 +1,84 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">DATA LEARNING</ui:define>
+		
+	<ui:define name="main-content">
+	    <div class="row">
+	      <h4 class="display-4">APRENDIZADO</h4>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">EXPRESSÃO REGULAR</h5>
+		        <div class="card-img regex-icon"></div>
+		        <p class="card-text">
+		          Expressões Regulares são padrões simples que categorizam dados
+		          de acordo com o formato do dado. Se um tipo de dado possui um padrão
+		          simples e observável, então o melhor método de identificação é uma expressão regular.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchLearningRegexesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">SCRIPTING</h5>
+		        <div class="card-img script-icon"></div>
+		        <p class="card-text">
+			      Script é uma série de comandos executados linha a linha que têm
+			      como função definir dados que não podem ser categorizados por expressões regulares.
+			    </p>
+		        <p:link value="" outcome="#{routerBean.searchLearningScriptsPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">INTELIGÊNCIA ARTIFICIAL</h5>
+		        <div class="card-img ia-icon"></div>
+		        <p class="card-text">
+		          Este tipo de análise é recomendada quando não há padrão em um tipo de dado.
+		          Nomes pessoais ou endereços, como um exemplo, não mantém um padrão lógico além
+		          de seu padrão linguístico. Como uma máquina não pode entender uma língua, uma análise
+		          estatística é necessária.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchLearningDatasPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <hr/>
+		  <h4 class="display-4">IDENTIFICAÇÃO</h4>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">COLUNAS DE IDENTIFICAÇÃO</h5>
+		        <div class="card-img identification-column-icon"></div>
+		        <p class="card-text">
+		          As colunas quais passarão por varreduras.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchIdentificationColumnsPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">CAMPOS DE IDENTIFICAÇÃO</h5>
+		        <div class="card-img identification-field-icon"></div>
+		        <p class="card-text">
+		          Os campos de identificação para varreduras que já estão cadastrados.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchIdentificationFieldsPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+	    </div>
+	</ui:define>
+</ui:composition>

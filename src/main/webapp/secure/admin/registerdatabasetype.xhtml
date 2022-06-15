@@ -1,0 +1,50 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui">
+
+  <ui:define name="title">#{registerDatabaseTypeBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  	
+  	<f:metadata>
+		<f:viewParam name="databaseType" value="#{registerDatabaseTypeBean.databaseType}" converter="#{databaseTypeConverter}"/>
+	</f:metadata>
+  
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerDatabaseTypeBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputDatabaseTypeName" value="#{registerDatabaseTypeBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatabaseTypeName" value="#{registerDatabaseTypeBean.databaseType.name}"/>
+				
+		  <p:outputLabel for="inputDatabaseTypeDescription" value="#{registerDatabaseTypeBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatabaseTypeDescription" value="#{registerDatabaseTypeBean.databaseType.description}"/>
+						    	
+		  <p:outputLabel for="inputDatabaseTypeDriver" value="#{registerDatabaseTypeBean.labels[4]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatabaseTypeDriver" value="#{registerDatabaseTypeBean.databaseType.driver}">
+		    <p:tooltip id="tooltipDatabaseTypeDriver" for="inputDatabaseTypeDriver" value="EX: com.mysql.cj.jdbc.Driver" showEvent="focus" hideEvent="blur" position="top"/>
+		  </p:inputText>
+		  
+		  <p:outputLabel for="inputDatabaseTypePrefix" value="#{registerDatabaseTypeBean.labels[5]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatabaseTypePrefix" value="#{registerDatabaseTypeBean.databaseType.prefix}">
+		    <p:tooltip id="tooltipDatabaseTypePrefix" for="inputDatabaseTypePrefix" value="EX: jdbc:mysql://" showEvent="focus" hideEvent="blur" position="top"/>
+		  </p:inputText>
+	
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerDatabaseTypeBean.register}" value="#{registerDatabaseTypeBean.labels[6]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="#{routerBean.searchDatabaseTypesPage}" value="#{registerDatabaseTypeBean.labels[7]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

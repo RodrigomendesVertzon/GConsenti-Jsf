@@ -1,0 +1,55 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">CONSENTIMENTOS</ui:define>
+		
+	<ui:define name="main-content">
+	    <div class="row">
+	      <h4 class="display-4">BASES LEGAIS E FINALIDADES</h4>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">BASES LEGAIS</h5>
+		        <div class="card-img legal-base-icon"></div>
+		        <p class="card-text">
+		          As bases legais da LGPD legitimam a utilização de dados pessoais. Cada operação de tratamento
+		          de dados pessoais deve ter ao menos uma base legal vinculada.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchLegalBasesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">FINALIDADES</h5>
+		        <div class="card-img finality-icon"></div>
+		        <p class="card-text">
+		          As finalidades são os propósitos determinados a tal tratamento de dados.
+		          Realize o cadastro de uma finalidade específica e então adicione uma "Finalidade por Base Legal".
+			    </p>
+		        <p:link value="" outcome="#{routerBean.searchFinalitiesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card-container col-12 col-lg-4">
+		    <div class="card">
+		      <div class="card-body">
+		        <h5 class="card-title">FINALIDADE POR BASE LEGAL</h5>
+		        <div class="card-img legal-base-finality-icon"></div>
+		        <p class="card-text">
+		          Uma finalidade deve ser atrelada a uma base legal.
+		          A base legal é o que define as políticas de tratamento de dados; a finalidade
+		          é a especificação de "para o quê" o dado é utilizado.
+		        </p>
+		        <p:link value="" outcome="#{routerBean.searchLegalBaseFinalitiesPage}" class="btn-full"/>
+		      </div>
+		    </div>
+		  </div>
+	    </div>
+	</ui:define>
+</ui:composition>

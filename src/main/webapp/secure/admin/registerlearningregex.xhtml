@@ -1,0 +1,50 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui">
+
+  <ui:define name="title">#{registerLearningRegexBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  	
+  	<f:metadata>
+		<f:viewParam name="learningRegex" value="#{registerLearningRegexBean.learningRegex}" converter="#{learningRegexConverter}"/>
+	</f:metadata>
+  
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerLearningRegexBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputLearningRegexName" value="#{registerLearningRegexBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningRegexName" value="#{registerLearningRegexBean.learningRegex.name}"/>
+				
+		  <p:outputLabel for="inputLearningRegexDescription" value="#{registerLearningRegexBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningRegexDescription" value="#{registerLearningRegexBean.learningRegex.description}"/>
+				
+		  <p:outputLabel for="inputLearningRegexPattern" value="#{registerLearningRegexBean.labels[4]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputLearningRegexPattern" value="#{registerLearningRegexBean.learningRegex.pattern}"/>
+						    	
+		  <p:outputLabel for="selectPersonalDataType" value="#{registerLearningRegexBean.labels[5]}"/>
+		  <p:selectOneMenu id="selectPersonalDataType" value="#{registerLearningRegexBean.learningRegex.personalDataType}" 
+		    converter="#{personalDataTypeConverter}" styleClass="form-control col-12">
+			<f:selectItems value="#{registerLearningRegexBean.personalDataTypes}" var="personalDataType"
+			  itemLabel="#{personalDataType.name}" itemValue="#{personalDataType}"/>
+		  </p:selectOneMenu>
+	
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerLearningRegexBean.register}" value="#{registerLearningRegexBean.labels[6]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="#{routerBean.searchLearningRegexesPage}" value="#{registerLearningRegexBean.labels[7]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

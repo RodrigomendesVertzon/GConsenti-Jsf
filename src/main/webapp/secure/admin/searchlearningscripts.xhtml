@@ -1,0 +1,169 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchLearningScriptBean.learningScriptLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchLearningScriptBean.learningScriptLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningScriptBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="learningScriptsTable"
+										fileName="learning_scripts_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningScriptBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="learningScriptsTable"
+										fileName="learning_scripts_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link
+									outcome="/secure/admin/registerlearningscript.xhtml"
+									styleClass="dropdown-item">#{searchLearningScriptBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningScriptBean.genericLabels[3]}"
+									actionListener="#{searchLearningScriptBean.clear()}"
+									update="learningScriptsTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="learningScript"
+						value="#{searchLearningScriptBean.learningScripts}"
+						id="learningScriptsTable"
+						emptyMessage="#{searchLearningScriptBean.learningScriptLabels[2]}" rows="50"
+						paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="#{searchLearningScriptBean.learningScriptLabels[3]}">
+							<h:outputText value="#{learningScript.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningScriptBean.learningScriptLabels[4]}">
+							<h:outputText value="#{learningScript.description}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningScriptBean.learningScriptLabels[5]}">
+							<h:outputText value="#{learningScript.code}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningScriptBean.learningScriptLabels[6]}">
+							<h:outputText value="#{learningScript.personalDataType.name}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchLearningScriptBean.learningScriptLabels[7]}">
+							<p:button outcome="/secure/admin/registerlearningscript.xhtml"
+								icon="ui-icon-pencil" title="#{searchLearningScriptBean.genericLabels[4]}">
+								<f:param name="learningScript" value="#{learningScript.id}" />
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchLearningScriptBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog">
+								<f:setPropertyActionListener
+									target="#{searchLearningScriptBean.learningScript}"
+									value="#{learningScript}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchLearningScriptBean.learningScriptLabels[8]}"
+				header="#{searchLearningScriptBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchLearningScriptBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchLearningScriptBean.genericLabels[8]}"
+					update=":searchForm:learningScriptsTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchLearningScriptBean.delete}" />
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchLearningScriptBean.learningScriptLabels[9]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputLearningScriptName" 
+								value="#{searchLearningScriptBean.learningScriptLabels[3]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningScriptName"
+								value="#{searchLearningScriptBean.learningScript.name}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningScriptEmail" 
+								value="#{searchLearningScriptBean.learningScriptLabels[4]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningScriptEmail"
+								value="#{searchLearningScriptBean.learningScript.description}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningScriptPhoneNumber"
+								value="#{searchLearningScriptBean.learningScriptLabels[5]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningScriptPhoneNumber"
+								value="#{searchLearningScriptBean.learningScript.code}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="selectPersonalDataType"
+								value="#{searchLearningScriptBean.learningScriptLabels[6]}" />
+							<p:selectOneMenu id="selectPersonalDataType"
+								value="#{searchLearningScriptBean.learningScript.personalDataType}"
+								converter="#{personalDataTypeConverter}"
+								styleClass="form-control">
+								<f:selectItems
+									value="#{searchLearningScriptBean.personalDataTypes}"
+									var="personalDataType" itemLabel="#{personalDataType.name}"
+									itemValue="#{personalDataType}" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchLearningScriptBean.search()}"
+								update="learningScriptsTable" value="#{searchLearningScriptBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

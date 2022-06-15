@@ -1,0 +1,168 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchLearningRegexBean.learningRegexLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchLearningRegexBean.learningRegexLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningRegexBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="learningRegexesTable"
+										fileName="learningRegexes_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningRegexBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="learningRegexesTable"
+										fileName="learningRegexes_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link
+									outcome="#{routerBean.registerLearningRegexPage}"
+									styleClass="dropdown-item">#{searchLearningRegexBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchLearningRegexBean.genericLabels[3]}"
+									actionListener="#{searchLearningRegexBean.clear()}"
+									update="learningRegexesTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="learningRegex"
+						value="#{searchLearningRegexBean.learningRegexes}"
+						id="learningRegexesTable"
+						emptyMessage="#{searchLearningRegexBean.learningRegexLabels[2]}" rows="50"
+						paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="#{searchLearningRegexBean.learningRegexLabels[3]}">
+							<h:outputText value="#{learningRegex.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningRegexBean.learningRegexLabels[4]}">
+							<h:outputText value="#{learningRegex.description}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningRegexBean.learningRegexLabels[5]}">
+							<h:outputText value="#{learningRegex.pattern}" />
+						</p:column>
+
+						<p:column headerText="#{searchLearningRegexBean.learningRegexLabels[6]}">
+							<h:outputText value="#{learningRegex.personalDataType.name}" />
+						</p:column>
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchLearningRegexBean.learningRegexLabels[7]}">
+							<p:button outcome="#{routerBean.searchLearningRegexesPage}"
+								icon="ui-icon-pencil" title="#{searchLearningRegexBean.genericLabels[4]}">
+								<f:param name="learningRegex" value="#{learningRegex.id}" />
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchLearningRegexBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog">
+								<f:setPropertyActionListener
+									target="#{searchLearningRegexBean.learningRegex}"
+									value="#{learningRegex}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchLearningRegexBean.learningRegexLabels[8]}"
+				header="#{searchLearningRegexBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchLearningRegexBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchLearningRegexBean.genericLabels[8]}"
+					update=":searchForm:learningRegexesTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchLearningRegexBean.delete}" />
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchLearningRegexBean.learningRegexLabels[9]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputLearningRegexName" 
+								value="#{searchLearningRegexBean.learningRegexLabels[3]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningRegexName"
+								value="#{searchLearningRegexBean.learningRegex.name}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningRegexEmail"
+								value="#{searchLearningRegexBean.learningRegexLabels[4]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningRegexEmail"
+								value="#{searchLearningRegexBean.learningRegex.description}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputLearningRegexPhoneNumber"
+								value="#{searchLearningRegexBean.learningRegexLabels[5]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputLearningRegexPhoneNumber"
+								value="#{searchLearningRegexBean.learningRegex.pattern}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="selectPersonalDataType"
+								value="#{searchLearningRegexBean.learningRegexLabels[6]}" />
+							<p:selectOneMenu id="selectPersonalDataType"
+								value="#{searchLearningRegexBean.learningRegex.personalDataType}"
+								converter="#{personalDataTypeConverter}"
+								styleClass="form-control">
+								<f:selectItems
+									value="#{searchLearningRegexBean.personalDataTypes}"
+									var="personalDataType" itemLabel="#{personalDataType.name}"
+									itemValue="#{personalDataType}" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchLearningRegexBean.search()}"
+								update="learningRegexesTable" value="#{searchLearningRegexBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

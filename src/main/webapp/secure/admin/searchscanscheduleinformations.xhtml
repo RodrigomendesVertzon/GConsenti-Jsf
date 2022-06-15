@@ -1,0 +1,93 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">Pesquisa de Informações de Varreduras</ui:define>
+		
+	<ui:define name="main-content">
+	  <h:form id="searchForm">
+	  
+	    <div class="row">
+		  <nav class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+		    <a class="navbar-brand col-12">INFORMAÇÕES DE VARREDURAS</a>
+		    <button type="button" class="btn btn-search-icon image-light" data-bs-toggle="modal" data-bs-target="#searchModal"/>
+		    <div class="dropdown">
+		      <a class="btn btn-exports-icon image-light" href="#" role="button" id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false"/>
+		      <ul class="dropdown-menu" aria-labelledby="exportsMenu">
+			    <li>
+		          <h:commandLink styleClass="dropdown-item" value="Exportar XLS">
+		            <i class="btn-exports-icon"/>
+		            <p:dataExporter type="xls" postProcessor="#{postProcessBean.postProcessXLS}"
+				      target="scanScheduleInformationsTable" fileName="scan_schedule_informations_report_xls_#{postProcessBean.dateNow()}"/>
+			      </h:commandLink>
+			    </li>
+			    <li>
+		          <h:commandLink styleClass="dropdown-item" value="Exportar PDF">
+		            <p:dataExporter type="pdf" target="scanScheduleInformationsTable" 
+		              fileName="scan_schedule_informations_report_pdf_#{postProcessBean.dateNow()}" />
+			      </h:commandLink>
+			    </li>
+		      </ul>
+		    </div>
+		    <div class="dropdown">
+		      <a class="btn btn-settings-icon image-light" href="#" role="button" id="settingsMenu" data-bs-toggle="dropdown" aria-expanded="false"/>
+		      <ul class="dropdown-menu" aria-labelledby="settingsMenu">
+			    <li>
+			      <h:commandLink styleClass="dropdown-item" value="Atualizar"
+			        actionListener="#{searchScanScheduleInformationBean.clear()}" update="scanScheduleInformationsTable"/>
+		        </li>
+		      </ul>
+		    </div>
+		  </nav>
+        </div>
+      
+	    <div class="row">
+	      <div class="form-container col-12 d-flex flex-column">
+	        <p:dataTable var="scanScheduleInformation" value="#{searchScanScheduleInformationBean.scanScheduleInformations}" id="scanScheduleInformationsTable"
+		      emptyMessage="Nenhuma informação de varredura encontrada." rows="50" paginator="true"
+		      paginatorAlwaysVisible="false" paginatorPosition="bottom" reflow="true">
+			  
+			  <p:column headerText="Nome">
+			    <h:outputText value="#{scanScheduleInformation.name}" />
+			  </p:column>	 
+				 
+			  <p:column headerText="Descrição">
+			    <h:outputText value="#{scanScheduleInformation.description}" />
+			  </p:column>
+
+		    </p:dataTable>
+	      </div>
+	    </div>
+
+	    <div class="modal fade" id="searchModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="searchModalLabel">Buscar</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      
+		      <div class="modal-body">
+		        <p:outputLabel for="inputScanScheduleInformationName" value="Nome"/>
+		        <p:inputText type="text" styleClass="form-control" id="inputScanScheduleInformationName" 
+		          value="#{searchScanScheduleInformationBean.scanScheduleInformation.name}" onfocus="this.value = ''"/>
+		          
+		        <p:outputLabel for="inputScanScheduleInformationDescription" value="Descrição"/>
+		        <p:inputText type="text" styleClass="form-control" id="inputScanScheduleInformationDescription" 
+		          value="#{searchScanScheduleInformationBean.scanScheduleInformation.description}" onfocus="this.value = ''"/>
+		      </div>
+		      
+		      <div class="modal-footer">
+		        <h:commandButton styleClass="btn btn-success" actionListener="#{searchScanScheduleInformationBean.search()}" 
+		          update="scanScheduleInformationsTable" value="Buscar"/>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	    
+	  </h:form>
+	</ui:define>
+</ui:composition>

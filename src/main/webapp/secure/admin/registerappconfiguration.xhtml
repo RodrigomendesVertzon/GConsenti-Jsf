@@ -1,0 +1,44 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:o="http://omnifaces.org/ui">
+
+  <ui:define name="title">#{registerAppConfigurationBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  
+  	<f:metadata>
+		<f:viewParam name="appConfiguration" value="#{registerAppConfigurationBean.appConfiguration}" converter="#{appConfigurationConverter}"/>
+	</f:metadata>
+	
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerAppConfigurationBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputAppConfigurationLabel" value="#{registerAppConfigurationBean.labels[2]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputAppConfigurationLabel" value="#{registerAppConfigurationBean.appConfiguration.label}"/>
+				
+		  <p:outputLabel for="inputAppConfigurationDescription" value="#{registerAppConfigurationBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputAppConfigurationDescription" value="#{registerAppConfigurationBean.appConfiguration.description}"/>
+		  
+		  <p:outputLabel for="inputAppConfigurationValue" value="#{registerAppConfigurationBean.labels[4]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputAppConfigurationValue" value="#{registerAppConfigurationBean.appConfiguration.value}"/>
+		  
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerAppConfigurationBean.register}" value="#{registerAppConfigurationBean.labels[5]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="#{routerBean.searchAppConfigurationsPage}" value="#{registerAppConfigurationBean.labels[6]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

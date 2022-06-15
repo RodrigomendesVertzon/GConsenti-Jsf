@@ -1,0 +1,60 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">CONFIGURAÇÕES DO APLICATIVO</ui:define>
+
+	<ui:define name="main-content">
+		<div class="row">
+			<h4 class="display-4">ÁREA DO ADMINISTRADOR</h4>
+			<div class="card-container col-12 col-lg-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">USUÁRIOS</h5>
+						<div class="card-img user-icon"></div>
+						<p class="card-text">Adicione, remova e altere usuários de
+							acesso ao sistema.</p>
+						<p:link value="" outcome="#{routerBean.searchUsersPage}"
+							class="btn-full" />
+					</div>
+				</div>
+			</div>
+			<div class="card-container col-12 col-lg-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">CONFIGURAÇÕES DE APLICATIVO</h5>
+						<div class="card-img app-configuration-icon"></div>
+						<p class="card-text">Adicione, altere ou remova parâmetros de inicialização da JVM.</p>
+						<p:link value="" outcome="#{routerBean.searchAppConfigurationsPage}"
+							class="btn-full" />
+					</div>
+				</div>
+			</div>
+			<div class="card-container col-12 col-lg-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">MENSAGENS DE ERRO</h5>
+						<div class="pi pi-times-circle" style="font-size: 4rem"></div>
+						<p class="card-text">Personalize as mensagens de erro do sistema.</p>
+						<p:link value="" outcome="#{routerBean.searchErrorMessagesPage}"
+							class="btn-full" />
+					</div>
+				</div>
+			</div>
+			<div class="card-container col-12 col-lg-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">PERSONALIZAÇÃO DE LABELS</h5>
+						<div class="pi pi-pencil" style="font-size: 4rem"></div>
+						<p class="card-text">Personalize as mensagens do sistemas.</p>
+						<p:link value="" outcome="#{routerBean.searchJsfLabelsPage}"
+							class="btn-full" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

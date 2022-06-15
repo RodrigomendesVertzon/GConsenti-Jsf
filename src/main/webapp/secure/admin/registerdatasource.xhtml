@@ -1,0 +1,74 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui">
+
+  <ui:define name="title">#{registerDatasourceBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  	
+  	<f:metadata>
+		<f:viewParam name="datasource" value="#{registerDatasourceBean.datasource}" converter="#{datasourceConverter}"/>
+		<f:viewParam name="editing" value="#{registerDatasourceBean.datasource.editing}"/>
+	</f:metadata>
+  
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerDatasourceBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="selectDatabaseType" value="#{registerDatasourceBean.labels[2]}"/>
+		  <p:selectOneMenu id="selectDatabaseType" value="#{registerDatasourceBean.datasource.databaseType}" converter="#{databaseTypeConverter}" styleClass="form-control col-12">
+			<f:selectItems value="#{registerDatasourceBean.databaseTypes}" var="databaseType"
+			  itemLabel="#{databaseType.name} - #{databaseType.driver}" itemValue="#{databaseType}"/>
+			<f:attribute name="collectionType" value="java.util.ArrayList" />
+		  </p:selectOneMenu>
+		  
+		   <p:outputLabel for="inputDatasourceIp" value="#{registerDatasourceBean.labels[3]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatasourceIp" value="#{registerDatasourceBean.datasource.ip}"/>
+				
+		  <p:outputLabel for="inputDatasourcePort" value="#{registerDatasourceBean.labels[4]}"/>
+		  <p:inputMask mask=":9?9999" type="text" styleClass="form-control" id="inputDatasourcePort" value="#{registerDatasourceBean.datasource.port}"/>		  
+			
+		  <p:outputLabel for="inputDatasourceName" value="#{registerDatasourceBean.labels[5]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatasourceName" value="#{registerDatasourceBean.datasource.name}"/>
+		  
+		  <p:outputLabel for="inputAuthenticationDatabase" value="#{registerDatasourceBean.labels[6]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputAuthenticationDatabase" value="#{registerDatasourceBean.datasource.authorizationDatabase}"/>
+		  		  
+		  <p:outputLabel for="inputDatasourceDescription" value="#{registerDatasourceBean.labels[7]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatasourceDescription" value="#{registerDatasourceBean.datasource.description}"/>
+		  
+		  <p:outputLabel for="inputDatasourceUser" value="#{registerDatasourceBean.labels[8]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputDatasourceUser" value="#{registerDatasourceBean.datasource.username}"/>		  
+		  
+		  <p:outputLabel for="inputDatasourcePassword" value="#{registerDatasourceBean.labels[9]}"/>
+		  <p:inputText type="password" styleClass="form-control" id="inputDatasourcePassword" value="#{registerDatasourceBean.datasource.password}" onfocus="this.value=''"/>		  		  
+		  
+		  <p:outputLabel for="checkManyLegalBaseFinalities" value="#{registerDatasourceBean.labels[10]}"/>
+    	  <p:selectManyCheckbox id="checkManyLegalBaseFinalities" value="#{registerDatasourceBean.datasource.legalBaseFinalities}" layout="responsive" columns="3" converter="#{legalBaseFinalityConverter}">
+	        <f:selectItems value="#{registerDatasourceBean.legalBaseFinalities}" var="legalBaseFinality" itemLabel="#{legalBaseFinality.finality.name} (#{legalBaseFinality.legalBase.name})" itemValue="#{legalBaseFinality}" />
+	      	<f:attribute name="collectionType" value="java.util.ArrayList" />
+	      </p:selectManyCheckbox>
+          
+          <p:outputLabel for="checkBooleanDataLearning" value="#{registerDatasourceBean.labels[11]}" />
+          <p:selectBooleanButton id="checkBooleanDataLearning" value="#{registerDatasourceBean.dataLearning}" 
+            onLabel="#{registerDatasourceBean.labels[12]}" offLabel="#{registerDatasourceBean.labels[13]}" onIcon="pi pi-check" offIcon="pi pi-times" style="width:70px"
+            styleClass="form-control"/>
+		  
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerDatasourceBean.register}" value="#{registerDatasourceBean.labels[14]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="#{routerBean.searchDatasourcesPage}" value="#{registerDatasourceBean.labels[15]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

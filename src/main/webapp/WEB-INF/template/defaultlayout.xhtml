@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" 
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:sec="http://www.springframework.org/schema/security">
+  
+  
+        
+  <h:head>
+    <h:outputStylesheet name="css/bootstrap.css" />
+    <h:outputStylesheet name="css/style.css" />
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Default Layout" />
+    <meta name="author" content="Vertzon Tecnologia e Servicos LTDA." />
+                
+    <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+	<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+	<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+	<!--[if gt IE 8]> <html class="no-js" lang="en"> <![endif]-->
+        
+    <title>
+      <ui:insert name="title">
+        GConsenti
+      </ui:insert>
+    </title>
+  </h:head>
+
+  <h:body>
+    <div id="loader">
+      <div class="spinner-border" role="status"></div>
+    </div>
+    <div id="wrapper" class="container-fluid" style="display: none;">
+      <div class="row">
+        <header class="col-12">
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top col-12 col-lg-3">
+            <div class="container-fluid">
+              <div class="navbar-background-image"></div>
+              <div class="navbar-background-pane"></div>
+              <p:link value="GCONSENTI" outcome="/secure/dashboard" styleClass="navbar-brand"/>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav col-12">
+                  <li class="nav-item">
+                    <p:link styleClass="nav-link" value="DASHBOARD" outcome="/secure/dashboard"/>
+                  </li>
+                  <li class="nav-item">
+                    <p:link styleClass="nav-link" value="AUTORIZAÇÕES LEGAIS" outcome="/secure/admin/authorizations" rendered="#{sessionAuthority.isAdmin()}"/>
+                  </li>
+                  <li class="nav-item">
+                    <p:link styleClass="nav-link" value="DADOS" outcome="/secure/admin/data" rendered="#{sessionAuthority.isAdmin()}"/>
+                  </li>
+                  <li class="nav-item">
+                    <p:link styleClass="nav-link" value="APRENDIZADO" outcome="/secure/admin/datalearning" rendered="#{sessionAuthority.isAdmin()}"/>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" value="LOGOUT" href="/perform_logout"> LOGOUT </a>
+                  </li>
+                  <li class="nav-item nav-settings">
+                    <p:link styleClass="nav-link" value="CONFIGURAÇÕES" outcome="/secure/admin/settings" rendered="#{sessionAuthority.isAdmin()}"/>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+          
+        <main class="col-12 col-lg-12">
+          <ui:insert name="main-content"/>
+        </main>
+      </div>
+    </div>
+    
+    <h:outputScript name="js/bootstrap.bundle.js"/>
+    <h:outputScript name="js/general.js"/>
+  </h:body>	
+</html>

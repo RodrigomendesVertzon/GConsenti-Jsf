@@ -1,0 +1,159 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchFilesourceBean.filesourceLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchFilesourceBean.filesourceLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchFilesourceBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="filesourcesTable"
+										fileName="filesources_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchFilesourceBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="filesourcesTable"
+										fileName="filesources_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link outcome="/secure/admin/registerfilesource.xhtml"
+									styleClass="dropdown-item">#{searchFilesourceBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchFilesourceBean.genericLabels[3]}"
+									actionListener="#{searchFilesourceBean.clear()}"
+									update="filesourcesTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="filesource"
+						value="#{searchFilesourceBean.filesources}" id="filesourcesTable"
+						emptyMessage="#{searchFilesourceBean.filesourceLabels[2]}" rows="50"
+						paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						class="table table-dark table-striped">
+
+						<p:column headerText="#{searchFilesourceBean.filesourceLabels[3]}">
+							<h:outputText value="#{filesource.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchFilesourceBean.filesourceLabels[4]}">
+							<h:outputText value="#{filesource.description}" />
+						</p:column>
+
+						<p:column headerText="#{searchFilesourceBean.filesourceLabels[5]}">
+							<h:outputText value="#{filesource.filePath}" />
+						</p:column>
+
+						<p:column headerText="#{searchFilesourceBean.filesourceLabels[6]}">
+							<p:dataList value="#{filesource.legalBaseFinalities}"
+								var="legalBaseFinality" type="unordered">
+			     					#{legalBaseFinality.finality.name} (#{legalBaseFinality.legalBase.name}); 
+			    			</p:dataList>
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchFilesourceBean.filesourceLabels[7]}">
+							<p:button outcome="/secure/admin/registerfilesource.xhtml"
+								icon="ui-icon-pencil" title="#{searchFilesourceBean.genericLabels[4]}">
+								<f:param name="filesource" value="#{filesource.id}" />
+								<f:param name="editing" value="#{filesource.editing=true}"/>
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchFilesourceBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog">
+								<f:setPropertyActionListener
+									target="#{searchFilesourceBean.filesource}"
+									value="#{filesource}" />
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</div>
+			</div>
+			
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchFilesourceBean.filesourceLabels[8]}"
+				header="#{searchFilesourceBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchFilesourceBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchFilesourceBean.genericLabels[8]}"
+					update=":searchForm:filesourcesTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchFilesourceBean.delete}" />
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchFilesourceBean.filesourceLabels[9]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputFilesourceName" value="#{searchFilesourceBean.filesourceLabels[3]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputFilesourceName"
+								value="#{searchFilesourceBean.filesource.name}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputFilesourceDescription" value="#{searchFilesourceBean.filesourceLabels[4]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputFilesourceDescription"
+								value="#{searchFilesourceBean.filesource.description}"
+								onfocus="this.value = ''" />
+
+							<p:outputLabel for="inputFilesourceFilePath" value="#{searchFilesourceBean.filesourceLabels[5]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputFilesourceFilePath"
+								value="#{searchFilesourceBean.filesource.filePath}"
+								onfocus="this.value = ''" />
+
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchFilesourceBean.search()}"
+								update="filesourcesTable" value="#{searchFilesourceBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

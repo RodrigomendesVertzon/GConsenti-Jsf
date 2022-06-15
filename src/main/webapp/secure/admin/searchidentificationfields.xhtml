@@ -1,0 +1,175 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{searchIdentificationFieldBean.identificationFieldLabels[0]}</ui:define>
+
+	<ui:define name="main-content">
+		<h:form id="searchForm">
+
+			<div class="row">
+				<nav
+					class="nav navbar-dark bg-dark text-center d-flex flex-row ms-auto">
+					<a class="navbar-brand col-12">#{searchIdentificationFieldBean.identificationFieldLabels[1]}</a>
+					<button type="button" class="btn btn-search-icon image-light"
+						data-bs-toggle="modal" data-bs-target="#searchModal" />
+					<div class="dropdown">
+						<a class="btn btn-exports-icon image-light" href="#" role="button"
+							id="exportsMenu" data-bs-toggle="dropdown" aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="exportsMenu">
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchIdentificationFieldBean.genericLabels[0]}">
+									<i class="btn-exports-icon" />
+									<p:dataExporter type="xls"
+										postProcessor="#{postProcessBean.postProcessXLS}"
+										target="identificationFieldsTable"
+										fileName="identification_fields_report_xls_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchIdentificationColumnBean.genericLabels[1]}">
+									<p:dataExporter type="pdf" target="identificationFieldsTable"
+										fileName="identification_fields_report_pdf_#{postProcessBean.dateNow()}" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<a class="btn btn-settings-icon image-light" href="#"
+							role="button" id="settingsMenu" data-bs-toggle="dropdown"
+							aria-expanded="false" />
+						<ul class="dropdown-menu" aria-labelledby="settingsMenu">
+							<li><h:link
+									outcome="/secure/admin/registeridentificationfield.xhtml"
+									styleClass="dropdown-item">#{searchIdentificationColumnBean.genericLabels[2]}</h:link></li>
+							<li class="dropdown-divider" />
+							<li><h:commandLink styleClass="dropdown-item"
+									value="#{searchIdentificationColumnBean.genericLabels[3]}"
+									actionListener="#{searchIdentificationFieldBean.clear()}"
+									update="identificationFieldsTable" /></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+			<div class="row">
+				<div class="form-container col-12 d-flex flex-column">
+					<p:dataTable var="identificationField"
+						value="#{searchIdentificationFieldBean.identificationFields}"
+						id="identificationFieldsTable"
+						emptyMessage="#{searchIdentificationFieldBean.identificationFieldLabels[2]}" rows="50"
+						paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true">
+
+						<p:column headerText="#{searchIdentificationFieldBean.identificationFieldLabels[3]}">
+							<h:outputText value="#{identificationField.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchIdentificationFieldBean.identificationFieldLabels[4]}">
+							<h:outputText
+								value="#{identificationField.personalDataType.name}" />
+						</p:column>
+
+						<p:column headerText="#{searchIdentificationFieldBean.identificationFieldLabels[5]}">
+							<h:outputText
+								value="#{identificationField.personalDataType.method eq 'REGEX_IDENTIFICATION' ?
+								 'Expressão Regular'
+								: identificationField.personalDataType.method eq 'SCRIPT_IDENTIFICATION' ? 'Script'
+								: 'Inteligência Artificial'}" />
+						</p:column>
+
+						<p:column headerText="#{searchIdentificationFieldBean.identificationFieldLabels[6]}">
+							<p:dataList value="#{identificationField.identificationColumns}"
+								var="identificationColumn" type="ordered">
+							  #{identificationColumn.columnName}
+							</p:dataList>
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center"
+							headerText="#{searchIdentificationFieldBean.identificationFieldLabels[7]}">
+							<p:button outcome="#{routerBean.registerIdentificationFieldPage}"
+								icon="ui-icon-pencil" title="#{searchIdentificationColumnBean.genericLabels[4]}" styleClass="edit-button">
+								<f:param name="identificationField" value="#{identificationField.id}" />
+							</p:button>
+
+							<p:commandButton icon="ui-icon-trash" title="#{searchIdentificationColumnBean.genericLabels[5]}"
+								oncomplete="PF('confirmDeletion').show()" process="@this"
+								update=":searchForm:confirmDeletionDialog"
+								styleClass="delete-button">
+								<f:setPropertyActionListener
+									target="#{searchIdentificationFieldBean.identificationField}" value="#{identificationField}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			
+			<p:confirmDialog id="confirmDeletionDialog"
+				widgetVar="confirmDeletion"
+				message="#{searchIdentificationFieldBean.identificationFieldLabels[8]}"
+				header="#{searchIdentificationColumnBean.genericLabels[6]}" severity="alert">
+				<p:button value="#{searchIdentificationColumnBean.genericLabels[7]}"
+					onclick="PF('confirmDeletion').hide(); return false;" />
+				<p:commandButton value="#{searchIdentificationColumnBean.genericLabels[8]}"
+					update=":searchForm:identificationFieldsTable"
+					onclick="confirmDeletion.hide()"
+					actionListener="#{searchIdentificationFieldBean.delete}" styleClass="delete-button"/>
+			</p:confirmDialog>
+
+			<div class="modal fade" id="searchModal" data-bs-keyboard="false"
+				tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+				<div
+					class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="searchModalLabel">#{searchIdentificationFieldBean.identificationFieldLabels[9]}</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<p:outputLabel for="inputIdentificationFieldName" value="#{searchIdentificationFieldBean.identificationFieldLabels[3]}" />
+							<p:inputText type="text" styleClass="form-control"
+								id="inputIdentificationFieldName"
+								value="#{registerIdentificationFieldBean.identificationField.name}" />
+
+							<p:outputLabel for="selectPersonalDataType"
+								value="#{searchIdentificationFieldBean.identificationFieldLabels[4]}" />
+							<p:selectOneMenu id="selectPersonalDataType"
+								value="#{registerIdentificationFieldBean.identificationField.personalDataType}"
+								converter="#{personalDataTypeConverter}"
+								styleClass="form-control col-12">
+								<f:selectItems
+									value="#{registerIdentificationFieldBean.personalDataTypes}"
+									var="personalDataType" itemLabel="#{personalDataType.name}"
+									itemValue="#{personalDataType}" />
+								<f:attribute name="collectionType" value="java.util.ArrayList" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="checkManyIdentificationColumns"
+								value="#{searchIdentificationFieldBean.identificationFieldLabels[6]}" />
+							<p:selectManyCheckbox id="checkManyIdentificationColumns"
+								value="#{registerIdentificationFieldBean.identificationField.identificationColumns}"
+								layout="responsive" columns="3" converter="#{identificationColumnConverter}">
+								<f:selectItems
+									value="#{registerIdentificationFieldBean.identificationColumns}"
+									var="identificationColumn"
+									itemLabel="#{identificationColumn.columnName}"
+									itemValue="#{identificationColumn}" />
+					    	  	<f:attribute name="collectionType" value="java.util.ArrayList" />		
+							</p:selectManyCheckbox>
+						</div>
+
+						<div class="modal-footer">
+							<h:commandButton styleClass="btn btn-success"
+								actionListener="#{searchIdentificationFieldBean.search()}"
+								update="identificationFieldsTable" value="#{searchIdentificationColumnBean.genericLabels[9]}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

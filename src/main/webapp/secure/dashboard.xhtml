@@ -1,0 +1,101 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<ui:define name="title">DASHBOARD</ui:define>
+
+	<ui:define name="main-content">
+		<h:form>
+			<div class="row">
+				<nav class="nav d-flex flex-row">
+					<a class="navbar-brand col-12">DASHBOARD</a>
+				</nav>
+			</div>
+
+			<div class="row">
+				<h4 class="display-4" style="#{sessionAuthority.isWebmaster() ? 'display:none;' : 'display:block;'}">DADOS E VARREDURAS</h4>
+				<p class="col-12 text-center">Olá, #{dashboardViewBean.username}
+				<br/> 
+					Você é um(a)
+					<h:outputLabel value="#{sessionAuthority.isAdmin() ? 'administrador(a)' : sessionAuthority.isWebmaster() ? 'webmaster' : 'auditor(a)'}" /> 
+ 				</p>
+				
+				<div class="card-container col-12 col-lg-4" style="#{sessionAuthority.isWebmaster() ? 'display:none;' : 'display:block;'}">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">DADOS PESSOAIS ENCONTRADOS</h5>
+							<div class="card-img identification-column-icon"></div>
+							<p class="card-text">Os dados pessoais encontrados nas bases
+								de dados de varreduras.</p>
+							<p:link value=""
+								outcome="#{routerBean.searchPersonalDataLocationsPage}"
+								class="btn-full" />
+						</div>
+					</div>
+				</div>
+				<div class="card-container col-12 col-lg-4" style="#{sessionAuthority.isAdmin() ? 'display:block;':'display:none;'}">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">AGENDAMENTOS</h5>
+							<div class="card-img schedule-icon"></div>
+							<p class="card-text">As varreduras agendadas. Cheque datas,
+								horários ou crie varreduras novas.</p>
+							<p:link value="" outcome="#{routerBean.searchScanSchedulesPage}"
+								class="btn-full" />
+						</div>
+					</div>
+				</div>
+				<div class="card-container col-12 col-lg-4" style="#{sessionAuthority.isWebmaster() ? 'display:none;' : 'display:block;'}">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">MAPA DE DADOS</h5>
+							<div class="card-img map-icon"></div>
+							<p class="card-text">O mapa de dados gerado dinamicamente
+								pelas varreduras realizadas.</p>
+							<p:link value="" outcome="/secure/dashboard.xhtml"
+								class="btn-full" />
+						</div>
+					</div>
+				</div>
+
+				<h4 class="display-4">ESTATíSTICAS</h4>
+				<h:selectOneMenu value="#{dashboardViewBean.selectedStatistics}"
+					styleClass="mt-1 mb-1 w-50 m-auto">
+					<f:selectItem itemValue="DADOS" />
+					<f:selectItem itemValue="VARREDURAS" />
+					<f:ajax render="@form" />
+				</h:selectOneMenu>
+				<h:panelGroup
+					rendered="#{dashboardViewBean.selectedStatistics == 'DADOS'}"
+					styleClass="fade-in fade-out col-lg-12">
+					<div class="chart-container col-12">
+						<div class="card-container col-12 col-lg-4">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">TOTAL DE DADOS POR TIPO</h5>
+									<p:pieChart model="#{dashboardViewBean.dataPerType}"
+										style="width: 500px;" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="chart-container col-12">
+						<div class="card-container col-12 col-lg-4">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">TOTAL DE DADOS POR DATASOURCE</h5>
+									<p:pieChart model="#{dashboardViewBean.totalDataPerDatasource}"
+										style="width: 500px;" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:panelGroup>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,44 @@
+<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:o="http://omnifaces.org/ui">
+
+  <ui:define name="title">#{registerErrorMessageBean.labels[0]}</ui:define>
+    	
+  <ui:define name="main-content">
+  
+  	<f:metadata>
+		<f:viewParam name="errorMessage" value="#{registerErrorMessageBean.errorMessage}" converter="#{errorMessageConverter}"/>
+	</f:metadata>
+	
+	<h:form>
+	  <div class="row">
+	    <nav class="nav navbar-dark bg-dark col-12">
+          <a class="navbar-brand col-12">#{registerErrorMessageBean.labels[1]}</a>
+        </nav>
+	    <div class="form-container col-12 col-lg-8 d-flex flex-column">
+	      <p:growl id="growl" life="3500" showDetails="false" autoUpdate="true" sticky="false"/>
+
+		  <p:outputLabel for="inputErrorMessageCode" value="#{registerErrorMessageBean.labels[2]}"/>
+		  <p:inputText type="text" disabled = "true" styleClass="form-control" id="inputErrorMessageCode" value="#{registerErrorMessageBean.errorMessage.errorCode}"/>
+				
+		  <p:outputLabel for="inputErrorMessageLabel" value="#{registerErrorMessageBean.labels[3]}"/>
+		  <p:inputText type="text" disabled = "true" styleClass="form-control" id="inputErrorMessageLabel" value="#{registerErrorMessageBean.errorMessage.label}"/>
+		  
+		  <p:outputLabel for="inputErrorMessageDescription" value="#{registerErrorMessageBean.labels[4]}"/>
+		  <p:inputText type="text" styleClass="form-control" id="inputErrorMessageDescription" value="#{registerErrorMessageBean.errorMessage.descError}"/>
+		  
+	      <div class="button-panel d-flex flex-row mt-auto">
+		    <p:commandLink id="submitForm" update="growl" action="#{registerErrorMessageBean.register}" value="#{registerErrorMessageBean.labels[5]}"
+		      styleClass="btn btn-lg btn-success mt-auto"/>
+		    <p:link id="searchButton" outcome="#{routerBean.searchErrorMessagesPage}" value="#{registerErrorMessageBean.labels[6]}"
+		      styleClass="btn btn-lg btn-primary mt-auto"/>
+		  </div>
+	    </div>
+	  </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

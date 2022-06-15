@@ -1,0 +1,73 @@
+﻿<ui:composition template="/WEB-INF/template/defaultlayout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">#{registerScanScheduleBean.labels[13]}</ui:define>
+
+	<ui:define name="main-content">
+		
+		<f:metadata>
+			<f:viewParam name="scanSchedule" value="#{registerScanScheduleBean.scanSchedule}" converter="#{scanScheduleConverter}"/>
+			<f:viewParam name="editing" value="#{registerScanScheduleBean.scanSchedule.editing}"/>
+		</f:metadata>
+	
+		<h:form autocomplete="off">
+			<div class="row">
+				<nav class="nav navbar-dark bg-dark col-12">
+					<a class="navbar-brand col-12">#{registerScanScheduleBean.labels[14]}</a>
+				</nav>
+				<div class="form-container col-12 col-lg-8 d-flex flex-column">
+					<p:growl id="growl" life="3500" showDetails="false"
+						autoUpdate="true" sticky="false" />
+
+					<p:outputLabel for="inputScanScheduledDate" value="#{registerScanScheduleBean.labels[15]}" />
+					<p:datePicker type="text" styleClass="form-control col-12"
+						id="inputScanScheduledDate"
+						value="#{registerScanScheduleBean.datetime}"
+						showTime="true" hideOnDateTimeSelect="true">
+					</p:datePicker>
+
+					<p:outputLabel for="inputScanScheduleDescription" value="#{registerScanScheduleBean.labels[16]}" />
+					<p:inputText type="text" styleClass="form-control"
+						id="inputScanScheduleDescription"
+						value="#{registerScanScheduleBean.scanSchedule.description}" />
+
+					<p:outputLabel for="selectScanScheduleFilesource"
+						value="#{registerScanScheduleBean.labels[17]}" />
+					<p:selectOneMenu id="selectScanScheduleFilesource"
+						value="#{registerScanScheduleBean.scanSchedule.filesource}"
+						converter="#{filesourceConverter}"
+						styleClass="form-control col-12">
+						<f:selectItems value="#{registerScanScheduleBean.filesources}"
+							var="filesource" itemLabel="#{filesource.name} - #{filesource.filePath}"
+							itemValue="#{filesource}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="selectScanScheduleType"
+						value="#{registerScanScheduleBean.labels[18]}" />
+					<p:selectOneMenu id="selectScanScheduleType"
+						value="#{registerScanScheduleBean.scanType}"
+						styleClass="form-control col-12">
+						<f:selectItem itemLabel="#{registerScanScheduleBean.labels[19]}" itemValue="UNICO" />
+						<f:selectItem itemLabel="#{registerScanScheduleBean.labels[20]}" itemValue="DIARIO" />
+						<f:selectItem itemLabel="#{registerScanScheduleBean.labels[21]}" itemValue="SEMANAL" />
+						<f:selectItem itemLabel="#{registerScanScheduleBean.labels[22]}" itemValue="QUINZENAL" />
+						<f:selectItem itemLabel="#{registerScanScheduleBean.labels[23]}" itemValue="MENSAL" />
+					</p:selectOneMenu>
+
+					<div class="button-panel d-flex flex-row mt-auto">
+						<p:commandLink id="submitForm" update="growl"
+							action="#{registerScanScheduleBean.register}" value="#{registerScanScheduleBean.labels[24]}"
+							styleClass="btn btn-lg btn-success mt-auto" />
+						<p:link id="searchButton"
+							outcome="/secure/admin/searchscanschedules" value="#{registerScanScheduleBean.labels[25]}"
+							styleClass="btn btn-lg btn-primary mt-auto" />
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
